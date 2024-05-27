@@ -8,31 +8,22 @@
 	</main>
 
 	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
+		<p>@ 2024 <a href="https://kota-yata.com">Kota Yatagai</a></p>
 	</footer>
 </div>
 
-<style>
+<style style="css">
 	.app {
-		display: flex;
-		flex-direction: column;
+		width: 100vw;
 		min-height: 100vh;
-	}
-
-	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		padding: 1rem;
-		width: 100%;
-		margin: 0 auto;
-		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
 	}
 
 	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+		position: fixed;
+		width: 100vw;
+		text-align: center;
+		bottom: 0;
 	}
 </style>
