@@ -27,7 +27,7 @@ export const SLIDES: {[key: string]: SlideInterface} = {
   },
   'wellcomp-1st': {
     title: 'マルチモーダルなセンシングデータを用いたSFC GO AROUNDの効果測定',
-    date: '2024-07-28',
+    date: '2023-07-28',
     description: '2023年春学期 中澤大越研 WIP発表資料'
   },
   'tco': {
