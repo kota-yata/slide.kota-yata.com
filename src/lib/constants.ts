@@ -34,6 +34,16 @@ export const SLIDES: {[key: string]: SlideInterface} = {
     title: '末尾呼び出し最適化とJavaScript',
     date: '2021-04-23',
     description: 'JavaScriptエンジンにおけるTCOの実装状況について'
+  },
+  'ssi_december': {
+    title: 'Principle of SSI',
+    date: '2020-12-26',
+    description: '自己主権型アイデンティティの原理と原則'
+  },
+  'did-2021': {
+    title: '年越しアイデンティティ',
+    date: '2020-12-31',
+    description: 'デジタルアイデンティティの歴史について'
   }
 }
 
