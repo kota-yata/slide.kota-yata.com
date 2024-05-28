@@ -1,9 +1,8 @@
 <script lang="ts">
   import PDFThumbnail from '$lib/components/PDFThumbnail.svelte';
-  import { SLIDES } from '$lib/constants';
+  import { SLIDES, sortByDate } from '$lib/constants';
 
-  const entries = Object.entries(SLIDES);
-
+  const entries = Object.entries(sortByDate(SLIDES));
 </script>
 
 <svelte:head>
@@ -11,7 +10,7 @@
 </svelte:head>
 
 <div class="root">
-  <h1>Kota's Slide Gallery</h1>
+  <h1>KOTA'S SLIDE GALLERY</h1>
   <div class="gallery">
     {#each entries as [fileName, _]}
       <div class="thumbnail"><PDFThumbnail {fileName} /></div>

@@ -7,9 +7,9 @@
 		<slot />
 	</main>
 
-	<footer>
+	<!-- <footer>
 		<p>@ 2024 <a href="https://kota-yata.com">Kota Yatagai</a></p>
-	</footer>
+	</footer> -->
 </div>
 
 <style style="css">
@@ -18,6 +18,12 @@
 		min-height: 100vh;
 		margin: 0;
 		padding: 0;
+	}
+
+	main {
+		margin: 0;
+		padding: 0;
+		width: 100%;
 	}
 
 	footer {
