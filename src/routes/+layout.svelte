@@ -7,9 +7,9 @@
 		<slot />
 	</main>
 
-	<!-- <footer>
+	<footer>
 		<p>@ 2024 <a href="https://kota-yata.com">Kota Yatagai</a></p>
-	</footer> -->
+	</footer>
 </div>
 
 <style style="css">
@@ -27,9 +27,12 @@
 	}
 
 	footer {
-		position: fixed;
+		color: var(--tertiary-color);
 		width: 100vw;
 		text-align: center;
 		bottom: 0;
+	}
+	footer > p > a {
+		color: var(--tertiary-color);
 	}
 </style>

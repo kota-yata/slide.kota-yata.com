@@ -32,7 +32,13 @@
     max-width: 2000px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: space-between;
+  }
+  .gallery::after {
+    content: "";
+    display: block;
+    width: 32%;  /* .boxに指定したwidthと同じ幅を指定する */
+    height: 0;
   }
   .thumbnail {
     margin-bottom: 2vh;
