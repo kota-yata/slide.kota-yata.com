@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
   const galleryContainer = document.getElementById('gallery-container');
   const modal = document.getElementById('pdf-modal');
-  const pdfViewer = document.getElementById('pdf-viewer');
+  const pdfViewer = document.getElementById('pdf-viewer'); // Gets the <embed> element
 
+  // --- Configuration: Define your slides here ---
   const slidesData = [
-    {
+       {
       title: "SFCデジタルツインハッカソン:センサー間の物体IDを統合する",
       pdfPath: "pdfs/icar-hackathon.pdf",
       previewImagePath: "previews/icar-hackathon.png"
@@ -56,17 +57,23 @@ document.addEventListener('DOMContentLoaded', function() {
     },
   ];
 
+  // Helper function to check for mobile-like screen width
+  function isMobileView() {
+    const mobileBreakpoint = 768; // pixels
+    return window.innerWidth <= mobileBreakpoint;
+  }
+
   function renderGallery() {
     if (!galleryContainer) {
       console.error("Gallery container not found!");
       return;
     }
-    galleryContainer.innerHTML = '';
+    galleryContainer.innerHTML = ''; // Clear existing content
 
     slidesData.forEach(slide => {
       const card = document.createElement('div');
       card.className = 'card';
-      card.dataset.pdfSrc = slide.pdfPath;
+      card.dataset.pdfPath = slide.pdfPath; // Store PDF path in a data attribute
 
       const img = document.createElement('img');
       img.src = slide.previewImagePath;
@@ -81,42 +88,56 @@ document.addEventListener('DOMContentLoaded', function() {
       card.appendChild(titleElement);
 
       card.addEventListener('click', function() {
-        openModal(this.dataset.pdfSrc);
+        const currentPdfPath = this.dataset.pdfPath;
+        if (isMobileView()) {
+          // On mobile, open the PDF directly (preferably in a new tab)
+          window.open(currentPdfPath, '_blank');
+        } else {
+          // On desktop, open in the modal
+          openModal(currentPdfPath);
+        }
       });
 
       galleryContainer.appendChild(card);
     });
   }
 
-  window.openModal = function(pdfSrc) {
+  // Function to open the modal (for non-mobile)
+  window.openModal = function(pdfSrcPath) {
     if (!modal || !pdfViewer) {
       console.error("Modal or PDF viewer element not found!");
       return;
     }
-    pdfViewer.src = pdfSrc;
+    pdfViewer.src = pdfSrcPath;
     modal.style.display = "block";
   }
 
-  window.closeModal = function() {
+  // Function to close the modal (for non-mobile)
+  window.closeModal = function() { // Make it global for inline onclick on close button
     if (!modal || !pdfViewer) {
       console.error("Modal or PDF viewer element not found!");
       return;
     }
     modal.style.display = "none";
-    pdfViewer.src = ""; // Clear src to stop loading/plugin
+    pdfViewer.src = ""; // Important to clear the src
   }
 
-  modal.addEventListener('click', function(event) {
-    if (event.target === modal) {
-      closeModal();
-    }
-  });
+  // Event listener for clicking outside the modal (for non-mobile)
+  if (modal) { // Ensure modal exists before adding listener
+    modal.addEventListener('click', function(event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+  }
 
+  // Event listener for Escape key (for non-mobile)
   document.addEventListener('keydown', function(event) {
-    if (event.key === "Escape" && modal.style.display === "block") {
+    if (event.key === "Escape" && modal && modal.style.display === "block") {
       closeModal();
     }
   });
 
+  // Initial render of the gallery
   renderGallery();
 });
