@@ -53,6 +53,25 @@
     | { unmount?: () => void; $destroy?: () => void | Promise<void> }
     | undefined;
 
+  function pageFromHash(): number {
+    const value = Number(window.location.hash.match(/^#(\d+)$/)?.[1]);
+    if (!Number.isInteger(value) || value < 1) return 1;
+    return Math.min(value, Math.max(totalPages, 1));
+  }
+
+  function updatePageHash(page: number, mode: 'push' | 'replace' = 'push'): void {
+    const hash = `#${page}`;
+    if (window.location.hash === hash) return;
+    const url = `${window.location.pathname}${window.location.search}${hash}`;
+    if (mode === 'replace') window.history.replaceState(null, '', url);
+    else window.history.pushState(null, '', url);
+  }
+
+  function initializePageFromHash(): void {
+    currentPage = pageFromHash();
+    updatePageHash(currentPage, 'replace');
+  }
+
   function fitKeynoteFallback(): void {
     if (!keynoteManifest || !keynoteHost || !stage) return;
 
@@ -153,13 +172,17 @@
     }
   }
 
-  async function goToPage(page: number): Promise<void> {
+  async function goToPage(page: number, updateUrl = true): Promise<void> {
     const nextPage = Math.min(Math.max(page, 1), totalPages);
-    if (nextPage === currentPage) return;
+    if (nextPage === currentPage) {
+      if (updateUrl) updatePageHash(nextPage);
+      return;
+    }
 
     if (data.slide.format === 'keynote' && !pdfDocument) {
       keynoteHost.querySelectorAll('video').forEach((video) => video.pause());
       currentPage = nextPage;
+      if (updateUrl) updatePageHash(currentPage);
       keynoteHost.querySelectorAll<HTMLButtonElement>('.iwork-nav button')[nextPage - 1]?.click();
       requestAnimationFrame(fitKeynoteFallback);
       return;
@@ -167,8 +190,16 @@
 
     stage.querySelectorAll('video').forEach((video) => video.pause());
     currentPage = nextPage;
+    if (updateUrl) updatePageHash(currentPage);
     await tick();
     await renderPage();
+  }
+
+  function handleHashChange(): void {
+    if (!totalPages) return;
+    const page = pageFromHash();
+    updatePageHash(page, 'replace');
+    void goToPage(page, false);
   }
 
   function handleKeydown(event: KeyboardEvent): void {
@@ -198,6 +229,8 @@
 
     resizeObserver.observe(stage);
     window.addEventListener('keydown', handleKeydown);
+    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleHashChange);
 
     void (async () => {
       try {
@@ -220,6 +253,7 @@
             loadingTask = pdfjs.getDocument({ url: keynoteManifest.renderedPdf });
             pdfDocument = await loadingTask.promise;
             totalPages = Math.min(keynoteManifest.pageCount, pdfDocument.numPages);
+            initializePageFromHash();
             await renderPage();
           } else {
             const [keynoteResponse, renderer] = await Promise.all([
@@ -228,12 +262,14 @@
             ]);
             if (!keynoteResponse.ok) throw new Error('Could not fetch the Keynote document');
             totalPages = keynoteManifest.pageCount;
+            initializePageFromHash();
             keynoteInstance = (await renderer.renderFileViewerIwork(
               await keynoteResponse.arrayBuffer(),
               keynoteHost,
               'key',
               undefined
             )) as typeof keynoteInstance;
+            keynoteHost.querySelectorAll<HTMLButtonElement>('.iwork-nav button')[currentPage - 1]?.click();
             requestAnimationFrame(fitKeynoteFallback);
           }
         } else {
@@ -245,6 +281,7 @@
           loadingTask = pdfjs.getDocument({ url: data.slide.pdfPath });
           pdfDocument = await loadingTask.promise;
           totalPages = pdfDocument.numPages;
+          initializePageFromHash();
           await renderPage();
         }
       } catch (error) {
@@ -257,6 +294,8 @@
 
     return () => {
       window.removeEventListener('keydown', handleKeydown);
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handleHashChange);
       resizeObserver.disconnect();
       clearTimeout(resizeTimer);
       renderGeneration += 1;
