@@ -10,7 +10,7 @@ except ImportError:
   # for this PNG-only version, but good to keep for consistency if PyMuPDF's direct save fails.
   pass # Continue, as PyMuPDF might handle PNG saving alone.
 
-def create_png_preview(pdf_path, output_base_dir="previews", dpi=150):
+def create_png_preview(pdf_path, output_base_dir="static/previews", dpi=150):
   """
   Generates a PNG preview image from the first page of a PDF.
 
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     sys.exit(1)
 
   input_path = sys.argv[1]
-  output_dir_name = "previews" # Default output directory name
+  output_dir_name = "static/previews" # Default output directory name
 
   if len(sys.argv) > 2:
     output_dir_name = sys.argv[2]

@@ -1,0 +1,804 @@
+{
+  "title": "MoQ Optimization for  Point-cloud Volumetric Video Streaming",
+  "pageCount": 23,
+  "width": 1920,
+  "height": 1080,
+  "media": [
+    {
+      "page": 4,
+      "src": "/keynotes/moq-meetup-japan/media/m2-res_480p-9803.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-9804.png",
+      "x": 1260.934326171875,
+      "y": 224.7953643798828,
+      "width": 570.062255859375,
+      "height": 320.40966796875,
+      "loop": false,
+      "muted": true
+    },
+    {
+      "page": 4,
+      "src": "/keynotes/moq-meetup-japan/media/tokyo-dome-vv-9809.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-9810.png",
+      "x": 1263.8951416015625,
+      "y": 545.1575317382812,
+      "width": 569.6173706054688,
+      "height": 320.40966796875,
+      "loop": false,
+      "muted": true
+    },
+    {
+      "page": 10,
+      "src": "/keynotes/moq-meetup-japan/media/subscriber-frame-drop-10249.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-10250.png",
+      "x": 1000.3424682617188,
+      "y": 172.8929443359375,
+      "width": 834.38330078125,
+      "height": 469.34063720703125,
+      "loop": true,
+      "muted": false
+    },
+    {
+      "page": 10,
+      "src": "/keynotes/moq-meetup-japan/media/active-11253.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-11254.png",
+      "x": 66.18148803710938,
+      "y": 170.36441040039062,
+      "width": 843.3736572265625,
+      "height": 474.397705078125,
+      "loop": true,
+      "muted": false
+    },
+    {
+      "page": 10,
+      "src": "/keynotes/moq-meetup-japan/media/calm-11264.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-10686.png",
+      "x": 585.79833984375,
+      "y": 651.3484497070312,
+      "width": 748.4033203125,
+      "height": 420.9768371582031,
+      "loop": true,
+      "muted": false
+    },
+    {
+      "page": 12,
+      "src": "/keynotes/moq-meetup-japan/media/subscriber-frame-drop-10249.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-10250.png",
+      "x": 261.37371826171875,
+      "y": 266.5904235839844,
+      "width": 1397.2525634765625,
+      "height": 785.9545288085938,
+      "loop": true,
+      "muted": false
+    },
+    {
+      "page": 16,
+      "src": "/keynotes/moq-meetup-japan/media/forward-no-frame-drop-10685.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-10686.png",
+      "x": 969.1095581054688,
+      "y": 252.30665588378906,
+      "width": 901.9640502929688,
+      "height": 507.3548889160156,
+      "loop": false,
+      "muted": true
+    },
+    {
+      "page": 16,
+      "src": "/keynotes/moq-meetup-japan/media/subscriber-frame-drop-10249.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-10250.png",
+      "x": 45.326751708984375,
+      "y": 252.30665588378906,
+      "width": 901.9642333984375,
+      "height": 507.3548889160156,
+      "loop": true,
+      "muted": false
+    },
+    {
+      "page": 22,
+      "src": "/keynotes/moq-meetup-japan/media/priority-on-2cm-first-12371.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-12372.png",
+      "x": 979.3599243164062,
+      "y": 242.2957305908203,
+      "width": 894.1597900390625,
+      "height": 502.9648742675781,
+      "loop": false,
+      "muted": false
+    },
+    {
+      "page": 22,
+      "src": "/keynotes/moq-meetup-japan/media/forward-no-frame-drop-10685.mp4",
+      "poster": "/keynotes/moq-meetup-japan/media/poster-10686.png",
+      "x": 46.48027420043945,
+      "y": 242.2957305908203,
+      "width": 894.1596069335938,
+      "height": 502.9648742675781,
+      "loop": false,
+      "muted": true
+    }
+  ],
+  "lists": [
+    {
+      "page": 2,
+      "text": "Introduction of point-cloud volumetric video\nFoV-adaptive streaming\nBuilding FoV-adaptive streaming with MoQ\nOptimizing MoQ for better experience\nUtilizing the Forward parameter to reduce tail-frame drops\nMapping segment position and angle to the Subscriber Priority",
+      "items": [
+        {
+          "text": "Introduction of point-cloud volumetric video",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "FoV-adaptive streaming",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Building FoV-adaptive streaming with MoQ",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Optimizing MoQ for better experience",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Utilizing the Forward parameter to reduce tail-frame drops",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "Mapping segment position and angle to the Subscriber Priority",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "text": "Last-year undergraduate at Keio University SFC\nResearch theme: Volumetric video streaming\nOSS contributions:\njitsi/jitsi-videobridge (funded by Google Summer of Code)\nwireshark/wireshark\nMoQ things like imquic, moq-wasm, MOQtail etc.\nDeveloping Moqtopus (yatagai-mm/moqtopus)\nMoQ client library in C++\nLightweight, kinda fast",
+      "items": [
+        {
+          "text": "Last-year undergraduate at Keio University SFC",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Research theme: Volumetric video streaming",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "OSS contributions:",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "jitsi/jitsi-videobridge (funded by Google Summer of Code)",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "wireshark/wireshark",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "MoQ things like imquic, moq-wasm, MOQtail etc.",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "Developing Moqtopus (yatagai-mm/moqtopus)",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "MoQ client library in C++",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "Lightweight, kinda fast",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        }
+      ]
+    },
+    {
+      "page": 4,
+      "text": "3D video made of a bunch of points\nEach point has coordinates and color\nIt could be transformed into mesh, 3DGS etc.\nBare point clouds are used for real-time rendering/presentations for latency reasons",
+      "items": [
+        {
+          "text": "3D video made of a bunch of points",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Each point has coordinates and color",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "It could be transformed into mesh, 3DGS etc.",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Bare point clouds are used for real-time rendering/presentations for latency reasons",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 4,
+      "text": "150 camera around the field at Tokyo Dome\nGenerates VV replay within 3 seconds",
+      "items": [
+        {
+          "text": "150 camera around the field at Tokyo Dome",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "Generates VV replay within 3 seconds",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        }
+      ]
+    },
+    {
+      "page": 5,
+      "text": "Currently deployed services do not live-stream the VV\nThey just capture/render VV in place and generate 2D replay video\nA high-quality frame of the whole scene: >30MB\n14.4Gbps@60fps\nA mid-quality frame of the whole scene: ~5MB\n2.4Gbps@60fps\nThese won’t go through access networks (WiFi or 5G)\nA lot of research going on to make volumetric video streaming possible.\n(And I want free-viewpoint baseball game at home!!)",
+      "items": [
+        {
+          "text": "Currently deployed services do not live-stream the VV",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "They just capture/render VV in place and generate 2D replay video",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "A high-quality frame of the whole scene: >30MB",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "14.4Gbps@60fps",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "A mid-quality frame of the whole scene: ~5MB",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "2.4Gbps@60fps",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "These won’t go through access networks (WiFi or 5G)",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "A lot of research going on to make volumetric video streaming possible.",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "(And I want free-viewpoint baseball game at home!!)",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        }
+      ]
+    },
+    {
+      "page": 6,
+      "text": "The sender separates a scene into multiple segments\nOn the viewer side, predict its field-of-view (FoV) a few frames ahead\nRequest the segments the predicted FoV intersects with\nPretty much all the state-of-the-art volumetric video research hires this approach\nOriginally used in 360° video streaming\nRequires real-time FoV prediction and low-latency transport",
+      "items": [
+        {
+          "text": "The sender separates a scene into multiple segments",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "On the viewer side, predict its field-of-view (FoV) a few frames ahead",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Request the segments the predicted FoV intersects with",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Pretty much all the state-of-the-art volumetric video research hires this approach",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Originally used in 360° video streaming",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "Requires real-time FoV prediction and low-latency transport",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 8,
+      "text": "YES\nHLS/DASH would require a total redesign to enable high-frequency prediction\nWebRTC is nice if you are sending video or audio\nYou have to use DataChannel for point clouds, and then you need a custom media protocol on top of it\nRequest/reply mechanism, control plane, prioritization…\nMoQ is a media-agnostic pub/sub protocol\nlow-latency, scalable media transmission\nIt will be the closest path to build VV streaming pipeline",
+      "items": [
+        {
+          "text": "YES",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "HLS/DASH would require a total redesign to enable high-frequency prediction",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "WebRTC is nice if you are sending video or audio",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "You have to use DataChannel for point clouds, and then you need a custom media protocol on top of it",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "Request/reply mechanism, control plane, prioritization…",
+          "level": 2,
+          "marker": "‣",
+          "indent": 96
+        },
+        {
+          "text": "MoQ is a media-agnostic pub/sub protocol",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "low-latency, scalable media transmission",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "It will be the closest path to build VV streaming pipeline",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        }
+      ]
+    },
+    {
+      "page": 9,
+      "text": "A MoQ track corresponds to a segment\nMoqtopus for the publisher/subscriber, MOQtail for the relay\nPublisher repeatedly sends 7s of baseball point-cloud VV\nSubscriber SUBSCRIBEs the track corresponds to the segment within a predicted FoV (5 frames ahead)\nWhen it’s out of the FoV, unsubscribe it (STOP_SENDING)\nThe publisher and relay are connected with 100GbE so upstream bandwidth won’t be a bottleneck",
+      "items": [
+        {
+          "text": "A MoQ track corresponds to a segment",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Moqtopus for the publisher/subscriber, MOQtail for the relay",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Publisher repeatedly sends 7s of baseball point-cloud VV",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Subscriber SUBSCRIBEs the track corresponds to the segment within a predicted FoV (5 frames ahead)",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "When it’s out of the FoV, unsubscribe it (STOP_SENDING)",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "The publisher and relay are connected with 100GbE so upstream bandwidth won’t be a bottleneck",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 13,
+      "text": "My hypothesis was the relay CPU was saturated because of frequent subscription churn and its state management\nMOQtail handled subscription churn perfectly\nSubscription/unsubscription could happen at every frame in the worst case\nI gave MOQtail (or tokio) 10 cores, but it only used 3 cores at maximum\nEven when scaling the number of subscribers to 50\nThe time from SUBSCRIBE reception to the next write_all to the corresponding stream was only few microseconds\nIt was not the relay causing the frame drop",
+      "items": [
+        {
+          "text": "My hypothesis was the relay CPU was saturated because of frequent subscription churn and its state management",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "MOQtail handled subscription churn perfectly",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Subscription/unsubscription could happen at every frame in the worst case",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "I gave MOQtail (or tokio) 10 cores, but it only used 3 cores at maximum",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Even when scaling the number of subscribers to 50",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "The time from SUBSCRIBE reception to the next write_all to the corresponding stream was only few microseconds",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "It was not the relay causing the frame drop",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 14,
+      "text": "In recent version of MoQ, Subscriber UNSUBSCRIBEs by sending STOP_SENDING on the bidirectional request stream.\n(We don’t UNSUBSCRIBE anymore btw)\nThen the relay sends RESET_STREAM to all streams in the subscription, cancelling the stream right away\nObjects still in the send queue could be discarded",
+      "items": [
+        {
+          "text": "In recent version of MoQ, Subscriber UNSUBSCRIBEs by sending STOP_SENDING on the bidirectional request stream.",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "(We don’t UNSUBSCRIBE anymore btw)",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "Then the relay sends RESET_STREAM to all streams in the subscription, cancelling the stream right away",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Objects still in the send queue could be discarded",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 15,
+      "text": "Forward is a binary parameter in a subscription\nREQUEST_UPDATE(forward=0) tells the relay to stop forwarding objects in the subscription\nThe relay retains the subscription so there’s no stream reset happening\nIt was originally defined to pre-warm the subscription\nAlso useful for frequent track switching and prediction like this workload.",
+      "items": [
+        {
+          "text": "Forward is a binary parameter in a subscription",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "REQUEST_UPDATE(forward=0) tells the relay to stop forwarding objects in the subscription",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "The relay retains the subscription so there’s no stream reset happening",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "It was originally defined to pre-warm the subscription",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Also useful for frequent track switching and prediction like this workload.",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 18,
+      "text": "A high-quality frame of the whole scene: >30MB\n14.4Gbps@60fps\n~1.4Gbps per segment\nA mid-quality frame of the whole scene: ~5MB\n2.4Gbps@60fps\n~240Mbps per segment\nIf you are watching baseball, you are likely to watch the whole infield most of the time\nReduction in bandwidth consumption is limited",
+      "items": [
+        {
+          "text": "A high-quality frame of the whole scene: >30MB",
+          "level": 1,
+          "marker": "‣",
+          "indent": 33
+        },
+        {
+          "text": "14.4Gbps@60fps",
+          "level": 2,
+          "marker": "•",
+          "indent": 96
+        },
+        {
+          "text": "~1.4Gbps per segment",
+          "level": 2,
+          "marker": "•",
+          "indent": 96
+        },
+        {
+          "text": "A mid-quality frame of the whole scene: ~5MB",
+          "level": 1,
+          "marker": "‣",
+          "indent": 33
+        },
+        {
+          "text": "2.4Gbps@60fps",
+          "level": 2,
+          "marker": "•",
+          "indent": 96
+        },
+        {
+          "text": "~240Mbps per segment",
+          "level": 2,
+          "marker": "•",
+          "indent": 96
+        },
+        {
+          "text": "If you are watching baseball, you are likely to watch the whole infield most of the time",
+          "level": 1,
+          "marker": "‣",
+          "indent": 33
+        },
+        {
+          "text": "Reduction in bandwidth consumption is limited",
+          "level": 2,
+          "marker": "•",
+          "indent": 96
+        }
+      ]
+    },
+    {
+      "page": 19,
+      "text": "For the segment the predicted position is in, request mid-quality track\nFor other frames, request low-quality tracks\nThe closer the segment is to the predicted position, the higher its quality",
+      "items": [
+        {
+          "text": "For the segment the predicted position is in, request mid-quality track",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "For other frames, request low-quality tracks",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "The closer the segment is to the predicted position, the higher its quality",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 20,
+      "text": "Subscriber Priority is per-subscription priority set by a subscriber\nRelay decides which object to send next based on the priority\nSubscriber Priority takes precedence over Publisher Priority and Group Order\nI scored segments in a predicted FoV based on the distance/angle from the predicted position\nscore = round(7/2(normalized_distance + normalized_angle)) * 32\n↑ Basically separates segments into 8 priorities\nCloser the higher priority, the closer to the center the higher priority",
+      "items": [
+        {
+          "text": "Subscriber Priority is per-subscription priority set by a subscriber",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Relay decides which object to send next based on the priority",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Subscriber Priority takes precedence over Publisher Priority and Group Order",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "I scored segments in a predicted FoV based on the distance/angle from the predicted position",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "score = round(7/2(normalized_distance + normalized_angle)) * 32",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "↑ Basically separates segments into 8 priorities",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "Closer the higher priority, the closer to the center the higher priority",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 21,
+      "text": "MOQtail applies Subscriber Priority to QUIC’s stream priority\nSo QUIC stack (Quinn) can schedule packets in its send queue based on the priority\nWhen Quinn’s write size reaches the flow control limit, write tasks from streams are held on Tokio runtime\n`stream.write_all(&object).await`\nWhen the limit is extended or ack’s received, Tokio polls one of the write task of streams\nSince Tokio does NOT know about the Subscriber Priority, a write task of the stream with the highest priority does not necessarily get executed first.\nI have set a shared write queue in MOQtail, and write in the order of the Subscriber Priority",
+      "items": [
+        {
+          "text": "MOQtail applies Subscriber Priority to QUIC’s stream priority",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "So QUIC stack (Quinn) can schedule packets in its send queue based on the priority",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "When Quinn’s write size reaches the flow control limit, write tasks from streams are held on Tokio runtime",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "`stream.write_all(&object).await`",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "When the limit is extended or ack’s received, Tokio polls one of the write task of streams",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "Since Tokio does NOT know about the Subscriber Priority, a write task of the stream with the highest priority does not necessarily get executed first.",
+          "level": 1,
+          "marker": "‣",
+          "indent": 48
+        },
+        {
+          "text": "I have set a shared write queue in MOQtail, and write in the order of the Subscriber Priority",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 22,
+      "text": "Send buffer, recv window and maximum number of streams are radically extended\nRenderer’s queue is also optimized to wait longer for higher priority objects\nScoring is a design choice (some might want to see everything with lower quality)",
+      "items": [
+        {
+          "text": "Send buffer, recv window and maximum number of streams are radically extended",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Renderer’s queue is also optimized to wait longer for higher priority objects",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Scoring is a design choice (some might want to see everything with lower quality)",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    },
+    {
+      "page": 23,
+      "text": "Forward was useful for pre-loading predicted frames\nSubscriber Priority was useful for optimizing the closer segments\nOverall, FoV-adaptive streaming of volumetric video seems to work over MoQ",
+      "items": [
+        {
+          "text": "Forward was useful for pre-loading predicted frames",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Subscriber Priority was useful for optimizing the closer segments",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        },
+        {
+          "text": "Overall, FoV-adaptive streaming of volumetric video seems to work over MoQ",
+          "level": 0,
+          "marker": "‣",
+          "indent": 0
+        }
+      ]
+    }
+  ]
+}
