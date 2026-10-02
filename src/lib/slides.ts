@@ -30,7 +30,7 @@ export const slides: Slide[] = [
   },
   {
     slug: 'seccamp2026-lt',
-    title: '“リアルな”遅延を測る仕様: Responsiveness under Working Conditions',
+    title: '“リアルな”遅延を測る仕様',
     date: '2026/08/12',
     format: 'pdf',
     pdfPath: '/pdfs/seccamp2026-lt.pdf',
