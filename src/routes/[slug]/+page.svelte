@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
 
   let canvas = $state<HTMLCanvasElement>(undefined!);
   let stage: HTMLElement;
+  let renderedSlide = $state<HTMLDivElement>(undefined!);
   let keynoteHost = $state<HTMLDivElement>(undefined!);
   let currentPage = $state(1);
   let totalPages = $state(0);
@@ -14,6 +15,7 @@
   let pdfDocument: import('pdfjs-dist').PDFDocumentProxy | undefined;
   let loadingTask: import('pdfjs-dist').PDFDocumentLoadingTask | undefined;
   let renderTask: import('pdfjs-dist').RenderTask | undefined;
+  let renderGeneration = 0;
   let resizeTimer: ReturnType<typeof setTimeout> | undefined;
 
   interface KeynoteMedia {
@@ -32,6 +34,7 @@
     pageCount: number;
     width: number;
     height: number;
+    renderedPdf?: string;
     media: KeynoteMedia[];
     lists: Array<{
       page: number;
@@ -45,12 +48,12 @@
     }>;
   }
 
-  let keynoteManifest: KeynoteManifest | undefined;
+  let keynoteManifest = $state<KeynoteManifest | undefined>();
   let keynoteInstance:
     | { unmount?: () => void; $destroy?: () => void | Promise<void> }
     | undefined;
 
-  function decorateKeynoteScene(): void {
+  function fitKeynoteFallback(): void {
     if (!keynoteManifest || !keynoteHost || !stage) return;
 
     const wrap = keynoteHost.querySelector<HTMLElement>('.iwork-scene-wrap');
@@ -95,16 +98,28 @@
   }
 
   async function renderPage(): Promise<void> {
-    if (data.slide.format === 'keynote') {
-      decorateKeynoteScene();
+    if (data.slide.format === 'keynote' && !pdfDocument) {
+      fitKeynoteFallback();
       return;
     }
 
-    if (!pdfDocument || !canvas || !stage) return;
+    if (!pdfDocument || !canvas || !stage || !renderedSlide) return;
 
-    renderTask?.cancel();
+    const generation = ++renderGeneration;
+    const previousRender = renderTask;
+    renderTask = undefined;
+    if (previousRender) {
+      previousRender.cancel();
+      try {
+        await previousRender.promise;
+      } catch (error) {
+        if (!(error instanceof Error) || error.name !== 'RenderingCancelledException') throw error;
+      }
+    }
+    if (generation !== renderGeneration) return;
 
     const page = await pdfDocument.getPage(currentPage);
+    if (generation !== renderGeneration) return;
     const original = page.getViewport({ scale: 1 });
     const availableWidth = Math.max(stage.clientWidth - 24, 1);
     const availableHeight = Math.max(stage.clientHeight - 24, 1);
@@ -119,6 +134,8 @@
     canvas.height = Math.floor(viewport.height * outputScale);
     canvas.style.width = `${Math.floor(viewport.width)}px`;
     canvas.style.height = `${Math.floor(viewport.height)}px`;
+    renderedSlide.style.width = `${Math.floor(viewport.width)}px`;
+    renderedSlide.style.height = `${Math.floor(viewport.height)}px`;
 
     renderTask = page.render({
       canvas,
@@ -131,6 +148,8 @@
       await renderTask.promise;
     } catch (error) {
       if (error instanceof Error && error.name !== 'RenderingCancelledException') throw error;
+    } finally {
+      if (generation === renderGeneration) renderTask = undefined;
     }
   }
 
@@ -138,15 +157,17 @@
     const nextPage = Math.min(Math.max(page, 1), totalPages);
     if (nextPage === currentPage) return;
 
-    if (data.slide.format === 'keynote') {
+    if (data.slide.format === 'keynote' && !pdfDocument) {
       keynoteHost.querySelectorAll('video').forEach((video) => video.pause());
       currentPage = nextPage;
       keynoteHost.querySelectorAll<HTMLButtonElement>('.iwork-nav button')[nextPage - 1]?.click();
-      requestAnimationFrame(decorateKeynoteScene);
+      requestAnimationFrame(fitKeynoteFallback);
       return;
     }
 
+    stage.querySelectorAll('video').forEach((video) => video.pause());
     currentPage = nextPage;
+    await tick();
     await renderPage();
   }
 
@@ -181,25 +202,40 @@
     void (async () => {
       try {
         if (data.slide.format === 'keynote') {
-          const [keynoteResponse, manifestResponse, renderer] = await Promise.all([
-            fetch(data.slide.keynotePath),
-            fetch(data.slide.keynoteManifestPath),
-            import('../../lib/keynote-renderer/index')
-          ]);
+          const manifestResponse = await fetch(data.slide.keynoteManifestPath);
 
-          if (!keynoteResponse.ok || !manifestResponse.ok) {
+          if (!manifestResponse.ok) {
             throw new Error('Could not fetch the Keynote document');
           }
 
           keynoteManifest = (await manifestResponse.json()) as KeynoteManifest;
-          totalPages = keynoteManifest.pageCount;
-          keynoteInstance = (await renderer.renderFileViewerIwork(
-            await keynoteResponse.arrayBuffer(),
-            keynoteHost,
-            'key',
-            undefined
-          )) as typeof keynoteInstance;
-          requestAnimationFrame(decorateKeynoteScene);
+          await tick();
+
+          if (keynoteManifest.renderedPdf) {
+            const pdfjs = await import('pdfjs-dist');
+            pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+              'pdfjs-dist/build/pdf.worker.min.mjs',
+              import.meta.url
+            ).toString();
+            loadingTask = pdfjs.getDocument({ url: keynoteManifest.renderedPdf });
+            pdfDocument = await loadingTask.promise;
+            totalPages = Math.min(keynoteManifest.pageCount, pdfDocument.numPages);
+            await renderPage();
+          } else {
+            const [keynoteResponse, renderer] = await Promise.all([
+              fetch(data.slide.keynotePath),
+              import('../../lib/keynote-renderer/index')
+            ]);
+            if (!keynoteResponse.ok) throw new Error('Could not fetch the Keynote document');
+            totalPages = keynoteManifest.pageCount;
+            keynoteInstance = (await renderer.renderFileViewerIwork(
+              await keynoteResponse.arrayBuffer(),
+              keynoteHost,
+              'key',
+              undefined
+            )) as typeof keynoteInstance;
+            requestAnimationFrame(fitKeynoteFallback);
+          }
         } else {
           const pdfjs = await import('pdfjs-dist');
           pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -223,6 +259,7 @@
       window.removeEventListener('keydown', handleKeydown);
       resizeObserver.disconnect();
       clearTimeout(resizeTimer);
+      renderGeneration += 1;
       renderTask?.cancel();
       void loadingTask?.destroy();
       if (keynoteInstance?.unmount) keynoteInstance.unmount();
@@ -261,8 +298,29 @@
         </a>
       </div>
     {/if}
-    {#if data.slide.format === 'pdf'}
-      <canvas bind:this={canvas} class:hidden={loading || Boolean(failure)}></canvas>
+    {#if data.slide.format === 'pdf' || keynoteManifest?.renderedPdf}
+      <div
+        bind:this={renderedSlide}
+        class="rendered-slide"
+        class:hidden={loading || Boolean(failure)}
+      >
+        <canvas bind:this={canvas}></canvas>
+        {#if data.slide.format === 'keynote' && keynoteManifest}
+          {#each keynoteManifest.media.filter((item) => item.page === currentPage) as media (media.src)}
+            <video
+              class="keynote-media-overlay"
+              src={media.src}
+              poster={media.poster}
+              controls
+              playsinline
+              preload="metadata"
+              loop={media.loop}
+              muted={media.muted}
+              style={`left:${media.x / keynoteManifest.width * 100}%;top:${media.y / keynoteManifest.height * 100}%;width:${media.width / keynoteManifest.width * 100}%;height:${media.height / keynoteManifest.height * 100}%`}
+            ></video>
+          {/each}
+        {/if}
+      </div>
     {:else}
       <div
         bind:this={keynoteHost}
@@ -320,16 +378,23 @@
     place-items: center;
   }
 
-  canvas {
-    display: block;
-    max-width: 100%;
-    max-height: 100%;
+  .rendered-slide {
+    position: relative;
+    overflow: hidden;
+    flex: none;
     background: white;
     box-shadow: 0 16px 60px rgba(0, 0, 0, 0.38);
   }
 
-  canvas.hidden {
+  .rendered-slide.hidden {
     visibility: hidden;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: white;
   }
 
   .keynote-host {
@@ -371,6 +436,7 @@
     box-shadow: 0 16px 60px rgba(0, 0, 0, 0.38);
   }
 
+  .keynote-media-overlay,
   :global(.keynote-host .keynote-media-overlay) {
     position: absolute;
     z-index: 100;

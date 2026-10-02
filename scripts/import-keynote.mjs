@@ -26,13 +26,57 @@ const mediaDirectory = join(outputDirectory, 'media');
 const keynoteOutputPath = join(keynoteDirectory, `${slugArgument}.key`);
 const previewDirectory = join(projectRoot, 'static', 'previews');
 const previewOutputPath = join(previewDirectory, `${slugArgument}.jpg`);
+const renderedPdfPath = join(outputDirectory, 'slides.pdf');
 
 await access(sourcePath);
 await mkdir(keynoteDirectory, { recursive: true });
 await mkdir(previewDirectory, { recursive: true });
-await rm(outputDirectory, { recursive: true, force: true });
 await mkdir(mediaDirectory, { recursive: true });
 await copyFile(sourcePath, keynoteOutputPath);
+
+const escapeAppleScriptString = (value) => value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
+
+async function renderWithKeynote() {
+  if (process.platform !== 'darwin') return undefined;
+
+  const script = `
+with timeout of 300 seconds
+  tell application id "com.apple.Keynote"
+    set sourceDocument to open POSIX file "${escapeAppleScriptString(sourcePath)}"
+    set outputLines to {}
+    repeat with sourcePage from 1 to count of slides of sourceDocument
+      set nativePage to slide number of slide sourcePage of sourceDocument
+      set end of outputLines to ((sourcePage as text) & ":" & (nativePage as text))
+    end repeat
+    export sourceDocument to POSIX file "${escapeAppleScriptString(renderedPdfPath)}" as PDF
+    close sourceDocument saving no
+  end tell
+  set AppleScript's text item delimiters to ","
+  return outputLines as text
+end timeout`;
+
+  try {
+    const { stdout } = await execFileAsync('/usr/bin/osascript', ['-e', script], {
+      maxBuffer: 1024 * 1024
+    });
+    const pageBySourcePage = new Map(
+      stdout.trim().split(',').flatMap((entry) => {
+        const [sourcePage, nativePage] = entry.split(':').map(Number);
+        return Number.isInteger(sourcePage) && Number.isInteger(nativePage) && nativePage > 0
+          ? [[sourcePage, nativePage]]
+          : [];
+      })
+    );
+    return {
+      pageBySourcePage,
+      pageCount: pageBySourcePage.size,
+      path: `/keynotes/${slugArgument}/slides.pdf`
+    };
+  } catch (error) {
+    console.warn('Could not export a layout-faithful PDF with Keynote; the browser renderer will be used as a fallback.');
+    return undefined;
+  }
+}
 
 const keynoteBuffer = await readFile(sourcePath);
 const arrayBuffer = keynoteBuffer.buffer.slice(
@@ -43,6 +87,7 @@ const [documentModel, container] = await Promise.all([
   parseIworkDocument(arrayBuffer, 'key'),
   inspectIworkContainer(arrayBuffer)
 ]);
+const nativeRendering = await renderWithKeynote();
 
 const previewEntry = container.zip.file('preview.jpg');
 if (previewEntry) {
@@ -178,6 +223,18 @@ async function copyOrConvertMovie(entryName, identifier) {
 
   const originalExtension = extname(entryName).toLowerCase();
   const safeBaseName = basename(entryName, originalExtension).replace(/[^a-zA-Z0-9._-]/g, '-');
+
+  if (originalExtension === '.mov' && process.platform === 'darwin') {
+    const convertedName = `${safeBaseName}.mp4`;
+    const convertedPath = join(mediaDirectory, convertedName);
+    try {
+      await access(convertedPath);
+      return `/keynotes/${slugArgument}/media/${convertedName}`;
+    } catch {
+      // Convert below when this asset identifier has not been imported yet.
+    }
+  }
+
   const originalPath = join(mediaDirectory, `${safeBaseName}${originalExtension}`);
   await writeFile(originalPath, await entry.async('nodebuffer'));
 
@@ -252,16 +309,27 @@ for (const slideIdentifier of slideIdentifiers) {
   }
 }
 
+const remapVisiblePages = (items) => nativeRendering
+  ? items.flatMap((item) => {
+      const page = nativeRendering.pageBySourcePage.get(item.page);
+      return page ? [{ ...item, page }] : [];
+    })
+  : items;
+
+const visibleMedia = remapVisiblePages(media);
+const visibleLists = remapVisiblePages(lists);
+
 const manifest = {
   title: documentModel.title,
-  pageCount: documentModel.scenes.length,
+  pageCount: nativeRendering?.pageCount ?? documentModel.scenes.length,
   width: Number(presentation?.size?.width ?? documentModel.scenes[0]?.width ?? 1920),
   height: Number(presentation?.size?.height ?? documentModel.scenes[0]?.height ?? 1080),
-  media,
-  lists
+  renderedPdf: nativeRendering?.path,
+  media: visibleMedia,
+  lists: visibleLists
 };
 
 await writeFile(join(outputDirectory, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 console.log(
-  `Imported ${documentModel.scenes.length} slides, ${media.length} movie placements, and ${lists.length} list blocks from ${sourcePath}`
+  `Imported ${manifest.pageCount} visible slides, ${visibleMedia.length} movie placements, and ${visibleLists.length} list blocks from ${sourcePath}`
 );

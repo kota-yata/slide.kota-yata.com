@@ -1,8 +1,9 @@
 {
   "title": "MoQ Optimization for  Point-cloud Volumetric Video Streaming",
-  "pageCount": 23,
+  "pageCount": 22,
   "width": 1920,
   "height": 1080,
+  "renderedPdf": "/keynotes/moq-meetup-japan/slides.pdf",
   "media": [
     {
       "page": 4,
@@ -93,7 +94,7 @@
       "muted": false
     },
     {
-      "page": 22,
+      "page": 21,
       "src": "/keynotes/moq-meetup-japan/media/priority-on-2cm-first-12371.mp4",
       "poster": "/keynotes/moq-meetup-japan/media/poster-12372.png",
       "x": 979.3599243164062,
@@ -104,7 +105,7 @@
       "muted": false
     },
     {
-      "page": 22,
+      "page": 21,
       "src": "/keynotes/moq-meetup-japan/media/forward-no-frame-drop-10685.mp4",
       "poster": "/keynotes/moq-meetup-japan/media/poster-10686.png",
       "x": 46.48027420043945,
@@ -706,54 +707,6 @@
     },
     {
       "page": 21,
-      "text": "MOQtail applies Subscriber Priority to QUIC’s stream priority\nSo QUIC stack (Quinn) can schedule packets in its send queue based on the priority\nWhen Quinn’s write size reaches the flow control limit, write tasks from streams are held on Tokio runtime\n`stream.write_all(&object).await`\nWhen the limit is extended or ack’s received, Tokio polls one of the write task of streams\nSince Tokio does NOT know about the Subscriber Priority, a write task of the stream with the highest priority does not necessarily get executed first.\nI have set a shared write queue in MOQtail, and write in the order of the Subscriber Priority",
-      "items": [
-        {
-          "text": "MOQtail applies Subscriber Priority to QUIC’s stream priority",
-          "level": 0,
-          "marker": "‣",
-          "indent": 0
-        },
-        {
-          "text": "So QUIC stack (Quinn) can schedule packets in its send queue based on the priority",
-          "level": 1,
-          "marker": "‣",
-          "indent": 48
-        },
-        {
-          "text": "When Quinn’s write size reaches the flow control limit, write tasks from streams are held on Tokio runtime",
-          "level": 0,
-          "marker": "‣",
-          "indent": 0
-        },
-        {
-          "text": "`stream.write_all(&object).await`",
-          "level": 1,
-          "marker": "‣",
-          "indent": 48
-        },
-        {
-          "text": "When the limit is extended or ack’s received, Tokio polls one of the write task of streams",
-          "level": 1,
-          "marker": "‣",
-          "indent": 48
-        },
-        {
-          "text": "Since Tokio does NOT know about the Subscriber Priority, a write task of the stream with the highest priority does not necessarily get executed first.",
-          "level": 1,
-          "marker": "‣",
-          "indent": 48
-        },
-        {
-          "text": "I have set a shared write queue in MOQtail, and write in the order of the Subscriber Priority",
-          "level": 0,
-          "marker": "‣",
-          "indent": 0
-        }
-      ]
-    },
-    {
-      "page": 22,
       "text": "Send buffer, recv window and maximum number of streams are radically extended\nRenderer’s queue is also optimized to wait longer for higher priority objects\nScoring is a design choice (some might want to see everything with lower quality)",
       "items": [
         {
@@ -777,7 +730,7 @@
       ]
     },
     {
-      "page": 23,
+      "page": 22,
       "text": "Forward was useful for pre-loading predicted frames\nSubscriber Priority was useful for optimizing the closer segments\nOverall, FoV-adaptive streaming of volumetric video seems to work over MoQ",
       "items": [
         {
