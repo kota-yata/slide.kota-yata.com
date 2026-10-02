@@ -25,6 +25,9 @@
             <span class="open-mark" aria-hidden="true">↗</span>
           </div>
           <h2>{slide.title}</h2>
+          {#if slide.date}
+            <time datetime={slide.date.replaceAll('/', '-')}>{slide.date}</time>
+          {/if}
         </a>
       {/each}
     </div>
@@ -121,6 +124,14 @@
     font-size: clamp(1rem, 1.8vw, 1.2rem);
     line-height: 1.55;
     letter-spacing: -0.015em;
+  }
+
+  time {
+    display: block;
+    margin-top: 5px;
+    color: #74746f;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
   }
 
   .card:hover img,

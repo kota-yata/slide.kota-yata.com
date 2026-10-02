@@ -60,7 +60,7 @@
   }
 
   function updatePageHash(page: number, mode: 'push' | 'replace' = 'push'): void {
-    const hash = `#${page}`;
+    const hash = page === 1 ? '' : `#${page}`;
     if (window.location.hash === hash) return;
     const url = `${window.location.pathname}${window.location.search}${hash}`;
     if (mode === 'replace') window.history.replaceState(null, '', url);
