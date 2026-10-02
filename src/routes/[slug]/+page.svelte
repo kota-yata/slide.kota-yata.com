@@ -392,19 +392,9 @@
 </main>
 
 <style>
-  :global(html) {
-    background: #111;
-    overflow: hidden;
-  }
-
-  :global(body) {
-    overflow: hidden;
-  }
-
   .viewer {
-    position: relative;
-    width: 100vw;
-    height: 100svh;
+    position: fixed;
+    inset: 0;
     overflow: hidden;
     color: #f7f7f7;
     background: #111;
